@@ -2,6 +2,22 @@
 
 A Pebble watchapp/watchface written in C using the Pebble SDK.
 
+## Cloning
+
+This repo uses a git submodule for [PebbleOS](https://github.com/coredevices/PebbleOS) at `resources/PebbleOS`. After cloning, initialize it:
+
+```sh
+git clone --recurse-submodules <this-repo-url>
+# or, if already cloned without --recurse-submodules:
+git submodule update --init --recursive
+```
+
+To pull submodule updates later:
+
+```sh
+git submodule update --remote --merge
+```
+
 ## Building & running
 
 ```sh
