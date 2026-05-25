@@ -1,7 +1,7 @@
 CC ?= cc
 CFLAGS := -Wall -Wextra -Werror -std=c11 -g -I../src/c -I.
 
-TESTS := test_sanity test_fact_catalog
+TESTS := test_sanity test_fact_catalog test_trial_history
 
 .PHONY: all test clean
 all: $(TESTS)
@@ -16,4 +16,7 @@ test_sanity: test_sanity.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 test_fact_catalog: test_fact_catalog.c ../src/c/fact_catalog.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+test_trial_history: test_trial_history.c ../src/c/trial_history.c
 	$(CC) $(CFLAGS) -o $@ $^
