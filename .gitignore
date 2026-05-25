@@ -1,3 +1,6 @@
 build/
 .lock-waf_darwin_build
 .superpowers/
+tests/test_*
+!tests/test_*.c
+!tests/test_*.h
