@@ -1,7 +1,7 @@
 CC ?= cc
 CFLAGS := -Wall -Wextra -Werror -std=c11 -g -I../src/c -I.
 
-TESTS := test_sanity
+TESTS := test_sanity test_fact_catalog
 
 .PHONY: all test clean
 all: $(TESTS)
@@ -13,4 +13,7 @@ clean:
 	rm -f $(TESTS)
 
 test_sanity: test_sanity.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+test_fact_catalog: test_fact_catalog.c ../src/c/fact_catalog.c
 	$(CC) $(CFLAGS) -o $@ $^
