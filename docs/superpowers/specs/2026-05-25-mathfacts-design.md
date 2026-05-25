@@ -49,10 +49,13 @@ All mockups live in `.superpowers/brainstorm/<session>/content/` and are referen
 
 - **Status bar (y=0..15, 16 px):** `MathFacts` (left), current category abbreviation (right): `Skip`, `Mult`, or `M&D`.
 - **Graph plot (y=20..136, ≈117 px):** Multi-series line graph, X-axis = days (120-day window ending today, or shorter if no older data exists), Y-axis = trial duration in seconds.
-  - Y-axis scaling: from best time across all fact groups in the category to worst time.
+  - Y-axis scaling: from best (min) to worst (max) trial duration across all fact groups in the current category, **restricted to trials whose timestamp falls inside the visible X window**.
   - One line per fact group within the current category.
-  - Series differentiated by line pattern: solid / dashed / dotted / dash-dot. Each line is labeled at its right edge with a 3-character tag (e.g. `2-3`, `By 7`).
-  - Daily best only: if multiple trials exist on the same day for a fact group, only the lowest-duration trial contributes a point.
+  - Series differentiated by line pattern in fixed order — within a category, the fact groups are listed in ID order (see §4) and assigned patterns: 1st = solid, 2nd = dashed, 3rd = dotted, 4th = dash-dot. (Skip Counting has 8 groups; patterns cycle: 5th = solid, 6th = dashed, etc. Acceptable because Skip Counting will not have 8 lines all overlapping in practice — most users drill 1–3 at a time.)
+  - Each line is labeled at its right edge with a short tag:
+    - Multiplication / M&D: `2-3`, `4-5`, `6-7`, `8-9`.
+    - Skip Counting: the integer alone — `2`, `3`, …, `9`.
+  - Daily best only: a "day" is a calendar day in **local time** (`localtime_r` on `time(NULL)`). If multiple trials exist on the same local day for a fact group, only the lowest-duration trial contributes a point.
 - **X-axis labels (y=137..148, 12 px):** `120d` (left edge), `today` (right edge).
 - **Control hint (y=150..167, 18 px):** `▲▼ category   ● select`.
 - **Empty state:** if no fact groups in the category have any trials yet, render the plot area with the gridlines and a centered "no data yet" message (Gothic 14).
@@ -84,6 +87,7 @@ Standard Pebble `menu_layer` with one section.
 All three category challenge screens share chrome:
 
 - **Status bar:** fact group abbrev on the left (`Mult 2-3`, `Skip Count By 7`, `M&D 6-7`); progress indicator `n/N` on the right (`5/20`, `12/40`, etc.). Skip Counting omits the n/N counter — it's a single-question trial.
+  - **Progress semantics:** `N` is fixed for the duration of the trial (20 for Mult, 40 for M&D) — it does **not** grow when the student skips. `n` is the number of questions that have been answered with `●` (correct/done); skipping does not increment `n`. So a trial that has been skipped twice will show `n/N` plateau at the skip point, then advance again when the student returns to the skipped questions at the end.
 - **Big challenge text:** Gothic 28 bold, two lines centered between y=70 and y=120 in the content area (left of action bar).
 - **Timer:** Gothic 14 below the challenge text, `⏱ MM:SS` updated on the `TickTimerService` second tick.
 - **Action bar (right 20 px):** icons for the three hardware buttons, aligned vertically with each button.
@@ -125,7 +129,8 @@ For an equation of the form `A op B = C` with exactly one of A/B/C replaced by `
 
 Pressing `▲` (cancel) at any point during a Challenge:
 
-- Stops the timer immediately.
+- Unsubscribes `TickTimerService`.
+- Frees the question queue.
 - Discards all trial state — nothing is written to persist.
 - Pops back to the Home UI directly (skips the Summary screen).
 
@@ -230,7 +235,9 @@ For the same fact rephrased as division `C ÷ A = B` (or `C ÷ B = A`):
 | 7    | `B=` / `?÷A`             |
 | 8    | `B=` / `C÷?`             |
 
-For each question, the app picks one of the relevant forms uniformly at random (4 forms for Mult, 8 for M&D — when M&D it first decides mult vs div per question scheduling, then picks the corresponding 4 forms).
+For each question, the app picks one of the 4 forms for that question's operation uniformly at random.
+
+**M&D queue construction:** for an M&D trial, the 40-question queue is built deterministically at trial start as 20 multiplication entries (one per underlying fact) plus 20 division entries (one per underlying fact), then shuffled once. The operation (mult vs div) is therefore decided at queue build time, not per-presentation, but the **display form** (which slot is `?`, which side `=` is on) is picked at each render — so a skipped-and-requeued question may be redisplayed in a different visual form.
 
 ## 5. Data model
 
@@ -307,7 +314,7 @@ Pebble's window stack handles all back-button pop transitions automatically.
 
 ### 8.3 Long-press handling on Home
 
-`window_long_click_subscribe(window, BUTTON_ID_SELECT, 5000, hold_down_handler, NULL)` — fires once at the 5-second hold threshold. Combined with a `vibes_short_pulse()` for tactile confirmation, then push Clear Data window.
+`window_single_click_subscribe(BUTTON_ID_SELECT, …)` and `window_long_click_subscribe(BUTTON_ID_SELECT, 5000, hold_down_handler, NULL)` are both registered on the Home window. Pebble's click system fires the single-click handler if the press releases before 5 s, and the long-click handler if the press is held to 5 s. Only one fires per press. The long-click handler triggers a `vibes_short_pulse()` for tactile confirmation, then pushes the Clear Data window.
 
 ## 9. Build & target platform
 
