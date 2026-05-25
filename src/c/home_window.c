@@ -2,6 +2,8 @@
 #include "storage.h"
 #include "graph_data.h"
 #include "trial_history.h"
+#include "clear_window.h"
+#include "factgroup_window.h"
 #include <time.h>
 
 static Window *s_window;
@@ -149,9 +151,18 @@ static void up_click(ClickRecognizerRef rec, void *ctx)   { (void)rec; (void)ctx
 static void down_click(ClickRecognizerRef rec, void *ctx) { (void)rec; (void)ctx;
   apply_category((FactCategory)(((int)s_current_category + 1) % CATEGORY_COUNT));
 }
+static void select_click(ClickRecognizerRef rec, void *ctx) { (void)rec; (void)ctx;
+  factgroup_window_push(s_current_category);
+}
+static void select_long_click(ClickRecognizerRef rec, void *ctx) { (void)rec; (void)ctx;
+  vibes_short_pulse();
+  clear_window_push();
+}
 static void click_config(void *ctx) { (void)ctx;
   window_single_click_subscribe(BUTTON_ID_UP, up_click);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click);
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_click);
+  window_long_click_subscribe(BUTTON_ID_SELECT, 5000, select_long_click, NULL);
 }
 
 static void window_load(Window *window) {
