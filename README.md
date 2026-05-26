@@ -25,6 +25,20 @@ pebble build                          # build for all targetPlatforms
 pebble install --emulator flint       # install on the pebble time duo emulator
 ```
 
+### Driving the emulator from the command line
+
+```sh
+pebble screenshot --emulator flint out.png   # save framebuffer to PNG
+pebble emu-button --emulator flint click up
+pebble emu-button --emulator flint click down
+pebble emu-button --emulator flint click select
+pebble emu-button --emulator flint click back
+pebble emu-button --emulator flint push select   # hold (pair with release)
+pebble emu-button --emulator flint release select
+pebble logs --emulator flint                  # tail APP_LOG output
+pebble kill                                   # stop emulator + pypkjs
+```
+
 ### To Watch over Cloud
 
 - Pebble app on phone, settines -> General -> Sign in Pebble Account /w Google
