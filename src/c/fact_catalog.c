@@ -9,14 +9,14 @@ static const FactGroup FACT_GROUPS[FACT_GROUP_COUNT] = {
   { 5, CATEGORY_SKIP, "By 7", "7", "Skip Count By 7", 7, 0, 0 },
   { 6, CATEGORY_SKIP, "By 8", "8", "Skip Count By 8", 8, 0, 0 },
   { 7, CATEGORY_SKIP, "By 9", "9", "Skip Count By 9", 9, 0, 0 },
-  { 8, CATEGORY_MULT, "2-3 \xC3\x97 1-10", "2-3", "Mult 2-3", 0, 2, 3 },
-  { 9, CATEGORY_MULT, "4-5 \xC3\x97 1-10", "4-5", "Mult 4-5", 0, 4, 5 },
-  {10, CATEGORY_MULT, "6-7 \xC3\x97 1-10", "6-7", "Mult 6-7", 0, 6, 7 },
-  {11, CATEGORY_MULT, "8-9 \xC3\x97 1-10", "8-9", "Mult 8-9", 0, 8, 9 },
-  {12, CATEGORY_MULTDIV, "2-3 \xC3\x97\xC3\xB7 1-10", "2-3", "M&D 2-3", 0, 2, 3 },
-  {13, CATEGORY_MULTDIV, "4-5 \xC3\x97\xC3\xB7 1-10", "4-5", "M&D 4-5", 0, 4, 5 },
-  {14, CATEGORY_MULTDIV, "6-7 \xC3\x97\xC3\xB7 1-10", "6-7", "M&D 6-7", 0, 6, 7 },
-  {15, CATEGORY_MULTDIV, "8-9 \xC3\x97\xC3\xB7 1-10", "8-9", "M&D 8-9", 0, 8, 9 },
+  { 8, CATEGORY_MULT, "2-3 x 1-10", "2-3", "Mult 2-3", 0, 2, 3 },
+  { 9, CATEGORY_MULT, "4-5 x 1-10", "4-5", "Mult 4-5", 0, 4, 5 },
+  {10, CATEGORY_MULT, "6-7 x 1-10", "6-7", "Mult 6-7", 0, 6, 7 },
+  {11, CATEGORY_MULT, "8-9 x 1-10", "8-9", "Mult 8-9", 0, 8, 9 },
+  {12, CATEGORY_MULTDIV, "2-3 x/ 1-10", "2-3", "M&D 2-3", 0, 2, 3 },
+  {13, CATEGORY_MULTDIV, "4-5 x/ 1-10", "4-5", "M&D 4-5", 0, 4, 5 },
+  {14, CATEGORY_MULTDIV, "6-7 x/ 1-10", "6-7", "M&D 6-7", 0, 6, 7 },
+  {15, CATEGORY_MULTDIV, "8-9 x/ 1-10", "8-9", "M&D 8-9", 0, 8, 9 },
 };
 
 const FactGroup *fact_group_at(uint8_t id) {

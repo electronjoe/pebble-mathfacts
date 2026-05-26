@@ -185,7 +185,7 @@ static void window_load(Window *window) {
   layer_add_child(root, s_graph_layer);
 
   s_hint_label = text_layer_create(GRect(0, 150, b.size.w, 18));
-  text_layer_set_text(s_hint_label, "\xE2\x96\xB2\xE2\x96\xBC category   \xE2\x97\x8F select");
+  text_layer_set_text(s_hint_label, "Up/Dn:cat  Sel:pick");
   text_layer_set_text_alignment(s_hint_label, GTextAlignmentCenter);
   text_layer_set_font(s_hint_label, fonts_get_system_font(FONT_KEY_GOTHIC_14));
   layer_add_child(root, text_layer_get_layer(s_hint_label));

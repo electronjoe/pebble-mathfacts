@@ -48,7 +48,7 @@ static void draw_row(GContext *ctx, const Layer *cell_layer, MenuIndex *idx, voi
   } else {
     char timebuf[8];
     format_time(storage_best_duration(fg_id), timebuf, sizeof(timebuf));
-    snprintf(sub, sizeof(sub), "%s \xC2\xB7 %u trials", timebuf, count);
+    snprintf(sub, sizeof(sub), "%s, %u trials", timebuf, count);
   }
   graphics_draw_text(ctx, sub,
     fonts_get_system_font(FONT_KEY_GOTHIC_14),

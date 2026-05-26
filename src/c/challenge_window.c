@@ -49,29 +49,28 @@ static void render_current_question(void) {
   uint8_t form = trial_engine_pick_form(qn);
   static char l1[8], l2[8];
   uint16_t c = (uint16_t)qn->a * qn->b;
-  /* Multiplication forms 1..4 — '×' is UTF-8 0xC3 0x97 */
-  /* Division forms 5..8       — '÷' is UTF-8 0xC3 0xB7 */
+  /* Use ASCII 'x' and '/' — Pebble system fonts don't include U+00D7 / U+00F7. */
   if (qn->op == OP_MULT) {
     switch (form) {
-      case 1: snprintf(l1, sizeof(l1), "?\xC3\x97%u", qn->b);
+      case 1: snprintf(l1, sizeof(l1), "?x%u", qn->b);
               snprintf(l2, sizeof(l2), "=%u", c); break;
-      case 2: snprintf(l1, sizeof(l1), "%u\xC3\x97?", qn->a);
+      case 2: snprintf(l1, sizeof(l1), "%ux?", qn->a);
               snprintf(l2, sizeof(l2), "=%u", c); break;
       case 3: snprintf(l1, sizeof(l1), "%u=", c);
-              snprintf(l2, sizeof(l2), "?\xC3\x97%u", qn->b); break;
+              snprintf(l2, sizeof(l2), "?x%u", qn->b); break;
       default: snprintf(l1, sizeof(l1), "%u=", c);
-               snprintf(l2, sizeof(l2), "%u\xC3\x97?", qn->a); break;
+               snprintf(l2, sizeof(l2), "%ux?", qn->a); break;
     }
   } else {  /* OP_DIV */
     switch (form) {
-      case 5: snprintf(l1, sizeof(l1), "?\xC3\xB7%u", qn->a);
+      case 5: snprintf(l1, sizeof(l1), "?/%u", qn->a);
               snprintf(l2, sizeof(l2), "=%u", qn->b); break;
-      case 6: snprintf(l1, sizeof(l1), "%u\xC3\xB7?", c);
+      case 6: snprintf(l1, sizeof(l1), "%u/?", c);
               snprintf(l2, sizeof(l2), "=%u", qn->b); break;
       case 7: snprintf(l1, sizeof(l1), "%u=", qn->b);
-              snprintf(l2, sizeof(l2), "?\xC3\xB7%u", qn->a); break;
+              snprintf(l2, sizeof(l2), "?/%u", qn->a); break;
       default: snprintf(l1, sizeof(l1), "%u=", qn->b);
-               snprintf(l2, sizeof(l2), "%u\xC3\xB7?", c); break;
+               snprintf(l2, sizeof(l2), "%u/?", c); break;
     }
   }
   text_layer_set_text(s_eq_line1, l1);
