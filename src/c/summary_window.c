@@ -1,6 +1,7 @@
 #include "summary_window.h"
 #include "storage.h"
 #include "trial_history.h"
+#include "bw_action_bar.h"
 #include <stdio.h>
 #include <time.h>
 
@@ -10,7 +11,7 @@ static TextLayer *s_status_right;
 static TextLayer *s_result_label;
 static Layer *s_bars_layer;
 static TextLayer *s_store_label, *s_discard_label;
-static ActionBarLayer *s_action;
+static BWActionBar *s_action;
 
 static uint8_t s_fg_id;
 static uint16_t s_duration_s;
@@ -145,9 +146,8 @@ static void window_load(Window *window) {
   text_layer_set_font(s_discard_label, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   layer_add_child(root, text_layer_get_layer(s_discard_label));
 
-  s_action = action_bar_layer_create();
-  action_bar_layer_set_background_color(s_action, GColorBlack);
-  action_bar_layer_add_to_window(s_action, window);
+  s_action = bw_action_bar_create(window);
+  bw_action_bar_set_icons(s_action, BW_ICON_CHEVRON_UP, BW_ICON_CHECK, BW_ICON_CHEVRON_DOWN);
 
   s_choice = SUMMARY_STORE;
   update_highlight();
@@ -155,7 +155,7 @@ static void window_load(Window *window) {
 
 static void window_unload(Window *window) {
   (void)window;
-  action_bar_layer_destroy(s_action);
+  bw_action_bar_destroy(s_action);
   text_layer_destroy(s_discard_label);
   text_layer_destroy(s_store_label);
   layer_destroy(s_bars_layer);

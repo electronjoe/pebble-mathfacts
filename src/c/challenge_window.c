@@ -3,6 +3,7 @@
 #include "trial_history.h"
 #include "storage.h"
 #include "summary_window.h"
+#include "bw_action_bar.h"
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -12,7 +13,7 @@ static StatusBarLayer *s_status;
 static TextLayer *s_status_left, *s_status_right;
 static TextLayer *s_eq_line1, *s_eq_line2;
 static TextLayer *s_timer;
-static ActionBarLayer *s_action;
+static BWActionBar *s_action;
 
 static const FactGroup *s_fg;
 static TrialQueue s_queue;
@@ -205,9 +206,9 @@ static void window_load(Window *window) {
   text_layer_set_font(s_timer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
   layer_add_child(root, text_layer_get_layer(s_timer));
 
-  s_action = action_bar_layer_create();
-  action_bar_layer_set_background_color(s_action, GColorBlack);
-  action_bar_layer_add_to_window(s_action, window);
+  s_action = bw_action_bar_create(window);
+  BWIconKind down_icon = (s_fg->category == CATEGORY_SKIP) ? BW_ICON_NONE : BW_ICON_SKIP;
+  bw_action_bar_set_icons(s_action, BW_ICON_CANCEL, BW_ICON_CHECK, down_icon);
 
   render_status_right();
   render_current_question();
@@ -218,7 +219,7 @@ static void window_load(Window *window) {
 static void window_unload(Window *window) {
   (void)window;
   cancel_tick();
-  action_bar_layer_destroy(s_action);
+  bw_action_bar_destroy(s_action);
   text_layer_destroy(s_timer);
   text_layer_destroy(s_eq_line2);
   text_layer_destroy(s_eq_line1);

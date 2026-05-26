@@ -1,12 +1,13 @@
 #include "clear_window.h"
 #include "storage.h"
+#include "bw_action_bar.h"
 
 static Window *s_window;
 static StatusBarLayer *s_status;
 static TextLayer *s_status_label;
 static TextLayer *s_body1, *s_body2, *s_body3;
 static TextLayer *s_cancel_label, *s_clear_label;
-static ActionBarLayer *s_action;
+static BWActionBar *s_action;
 
 typedef enum { CHOICE_CANCEL = 0, CHOICE_CLEAR = 1 } ClearChoice;
 static ClearChoice s_choice;
@@ -81,9 +82,8 @@ static void window_load(Window *window) {
   text_layer_set_font(s_clear_label, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   layer_add_child(root, text_layer_get_layer(s_clear_label));
 
-  s_action = action_bar_layer_create();
-  action_bar_layer_set_background_color(s_action, GColorBlack);
-  action_bar_layer_add_to_window(s_action, window);
+  s_action = bw_action_bar_create(window);
+  bw_action_bar_set_icons(s_action, BW_ICON_CHEVRON_UP, BW_ICON_CHECK, BW_ICON_CHEVRON_DOWN);
 
   s_choice = CHOICE_CANCEL;
   update_highlight();
@@ -91,7 +91,7 @@ static void window_load(Window *window) {
 
 static void window_unload(Window *window) {
   (void)window;
-  action_bar_layer_destroy(s_action);
+  bw_action_bar_destroy(s_action);
   text_layer_destroy(s_clear_label);
   text_layer_destroy(s_cancel_label);
   text_layer_destroy(s_body3);
