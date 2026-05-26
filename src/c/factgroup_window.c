@@ -38,7 +38,7 @@ static void draw_row(GContext *ctx, const Layer *cell_layer, MenuIndex *idx, voi
   GRect b = layer_get_bounds(cell_layer);
   graphics_draw_text(ctx, fg->short_name,
     fonts_get_system_font(highlighted ? FONT_KEY_GOTHIC_14_BOLD : FONT_KEY_GOTHIC_14),
-    GRect(4, 0, b.size.w - 8, 16),
+    GRect(4, -2, b.size.w - 8, 18),
     GTextOverflowModeWordWrap, GTextAlignmentLeft, NULL);
 
   char sub[24];
@@ -52,7 +52,7 @@ static void draw_row(GContext *ctx, const Layer *cell_layer, MenuIndex *idx, voi
   }
   graphics_draw_text(ctx, sub,
     fonts_get_system_font(FONT_KEY_GOTHIC_14),
-    GRect(4, 14, b.size.w - 8, 16),
+    GRect(4, 14, b.size.w - 8, 18),
     GTextOverflowModeWordWrap, GTextAlignmentLeft, NULL);
 }
 
